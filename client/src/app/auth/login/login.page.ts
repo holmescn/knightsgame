@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeathersService } from 'src/app/services/feathers.service';
 
@@ -7,23 +7,22 @@ import { FeathersService } from 'src/app/services/feathers.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
-  constructor(private feathers: FeathersService, private router: Router) { }
+  constructor(private feathers: FeathersService,
+              private router: Router) { }
 
-  ngOnInit() {
-  }
-
-  submit(form: any) {
-    console.log(form);
-    this.feathers.login({
-      email: '',
-      password: ''
-    }).then((u: any) => {
-      console.log(u);
+  async submit(form: any) {
+    try {
+      const user = await this.feathers.login({
+        strategy: 'local',
+        email: form.value.email,
+        password: form.value.password
+      });
+      console.log(user);
       this.router.navigateByUrl('home');
-    }).catch((e: Error) => {
-      console.error(e);
-    })
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { NgForm, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { FeathersService } from 'src/app/services/feathers.service';
 
 @Component({
@@ -7,23 +9,35 @@ import { FeathersService } from 'src/app/services/feathers.service';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage {
 
-  constructor(private feathers: FeathersService, private router: Router) { }
+  constructor(private feathers: FeathersService, private toast: ToastController, private router: Router) { }
 
-  ngOnInit() {
-  }
+  async submit(form: NgForm) {
+    if (form.value.confirm !== form.value.password) {
+      const toast = await this.toast.create({
+        message: 'Confirm password does not match.',
+        duration: 2000
+      });
+      toast.present();
 
-  submit(form: any) {
-    console.log(form);
-    // this.feathers.service("users").create({
-    //   email: '',
-    //   password: '',
-    // }).then((u: any) => {
-    //   console.error(u);
-    //   this.router.navigateByUrl('home');
-    // }).catch((e: Error) => {
-    //   console.error(e);
-    // });
+      return;
+    }
+
+    try {
+      const created = await this.feathers.service('users').create({
+        email: form.value.email,
+        password: form.value.password
+      });
+      const user = await this.feathers.login({
+        strategy: 'local',
+        email: form.value.email,
+        password: form.value.password
+      });
+      console.info(created, user);
+      this.router.navigateByUrl('home');
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
