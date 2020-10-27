@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -9,9 +9,38 @@ import { FeathersService } from 'src/app/services/feathers.service';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage {
-
+export class RegisterPage implements OnInit {
+  themeIcon: string;
+  themeText: string;
+  confirmed = false;
   constructor(private feathers: FeathersService, private toast: ToastController, private router: Router) { }
+
+  ngOnInit() {
+    const theme = localStorage.getItem('theme');
+    this.updateTheme(theme);
+  }
+
+  updateTheme(theme: string) {
+    if (theme === 'dark') {
+      this.themeIcon = 'sunny-outline';
+      this.themeText = '白天模式';
+      document.body.classList.add('dark');
+    } else {
+      this.themeIcon = 'moon-outline'
+      this.themeText = '夜间模式';
+      document.body.classList.remove('dark');
+    }
+  }
+
+  changeTheme(event: Event) {
+    const theme = this.themeIcon === 'sunny-outline' ? 'light' : 'dark';
+    this.updateTheme(theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  confirmPasswordChanged(form: NgForm) {
+    this.confirmed = form.value.password === form.value.confirm;
+  }
 
   async submit(form: NgForm) {
     if (form.value.confirm !== form.value.password) {

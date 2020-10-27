@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeathersService } from 'src/app/services/feathers.service';
 
@@ -7,10 +7,34 @@ import { FeathersService } from 'src/app/services/feathers.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
-
+export class LoginPage implements OnInit {
+  themeIcon: string;
+  themeText: string;
   constructor(private feathers: FeathersService,
               private router: Router) { }
+
+  ngOnInit() {
+    const theme = localStorage.getItem('theme');
+    this.updateTheme(theme);
+  }
+
+  updateTheme(theme: string) {
+    if (theme === 'dark') {
+      this.themeIcon = 'sunny-outline';
+      this.themeText = '白天模式';
+      document.body.classList.add('dark');
+    } else {
+      this.themeIcon = 'moon-outline'
+      this.themeText = '夜间模式';
+      document.body.classList.remove('dark');
+    }
+  }
+
+  changeTheme(event: Event) {
+    const theme = this.themeIcon === 'sunny-outline' ? 'light' : 'dark';
+    this.updateTheme(theme);
+    localStorage.setItem('theme', theme);
+  }
 
   async submit(form: any) {
     try {

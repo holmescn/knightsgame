@@ -1,5 +1,5 @@
-const assert = require('assert');
-const app = require('../src/app');
+import assert from 'assert';
+import app from '../src/app';
 
 describe('authentication', () => {
   it('registered the authentication service', () => {
@@ -24,7 +24,7 @@ describe('authentication', () => {
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
         ...userInfo
-      });
+      }, {});
       
       assert.ok(accessToken, 'Created access token for user');
       assert.ok(user, 'Includes user in authentication data');

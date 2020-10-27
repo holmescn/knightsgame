@@ -11,13 +11,13 @@
             <ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input name="confirm" type="password" placeholder="Password again" ngModel required></ion-input>
+            <ion-input name="confirm" type="password" placeholder="Password again" ngModel required (ionChange)="confirmPasswordChanged(form)"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button  size="large" type="submit" [disabled]="form.invalid" expand="block">Register</ion-button>
+          <ion-button  size="large" type="submit" [disabled]="form.invalid || !confirmed" expand="block">Register</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -28,3 +28,13 @@
     </ion-grid>
   </form>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="changeTheme($event)">
+        <ion-icon slot="start" [name]="themeIcon"></ion-icon>
+        {{ themeText }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

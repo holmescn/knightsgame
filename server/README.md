@@ -1,6 +1,6 @@
-# knights-game
+# knightsgame
 
-> A web version of Knights Game.
+> Knights Game.
 
 ## About
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/knights-game
+    cd path/to/knightsgame
     npm install
     ```
 

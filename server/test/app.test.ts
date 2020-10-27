@@ -1,10 +1,12 @@
-const assert = require('assert').strict;
-const axios = require('axios');
-const url = require('url');
-const app = require('../src/app');
+import assert from 'assert';
+import { Server } from 'http';
+import url from 'url';
+import axios from 'axios';
+
+import app from '../src/app';
 
 const port = app.get('port') || 8998;
-const getUrl = pathname => url.format({
+const getUrl = (pathname?: string): string => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',
   port,
@@ -12,7 +14,7 @@ const getUrl = pathname => url.format({
 });
 
 describe('Feathers application tests', () => {
-  let server;
+  let server: Server;
 
   before(function(done) {
     server = app.listen(port);
@@ -48,9 +50,7 @@ describe('Feathers application tests', () => {
 
     it('shows a 404 JSON error without stack trace', async () => {
       try {
-        await axios.get(getUrl('path/to/nowhere'), {
-          json: true
-        });
+        await axios.get(getUrl('path/to/nowhere'));
         assert.fail('should never get here');
       } catch (error) {
         const { response } = error;

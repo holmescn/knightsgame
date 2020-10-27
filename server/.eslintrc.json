@@ -5,10 +5,15 @@
     "mocha": true
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "parser": "@typescript-eslint/parser",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "extends": [
-    "eslint:recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "indent": [
@@ -26,6 +31,8 @@
     "semi": [
       "error",
       "always"
-    ]
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-interface": "off"
   }
 }
